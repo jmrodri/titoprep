@@ -122,7 +122,7 @@ if [ "$?" == "0" ] ; then
         msg="$msg\n$spec"
     done
     echo -e $msg | git commit -a -q -F -
-    echo "files commited."
+    echo "files committed."
 fi
 
 # now report on what's left
