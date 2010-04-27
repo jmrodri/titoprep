@@ -19,12 +19,17 @@ function filefromurl ()
 #TEST="true"
 TEST=""
 
+declare -a files
+count=0
 for file in *.spec
 do
   if [ "$file" == "*.spec" ] ; then
       echo "no spec files found, skipping"
       break
   fi
+
+  files[count]=$file
+  ((count++))
 
   pkg=`basename $file .spec`
   name=`grep ^Name $file | awk '{print $2}'`
@@ -107,6 +112,18 @@ do
   done
 
 done
+
+# prep to commit
+git status > /dev/null
+if [ "$?" == "0" ] ; then
+    msg="created project directories for each spec file:\n\n"
+    for spec in ${files[@]}
+    do
+        msg="$msg\n$spec"
+    done
+    echo -e $msg | git commit -a -q -F -
+    echo "files commited."
+fi
 
 # now report on what's left
 for srcfile in SOURCES/*
