@@ -125,6 +125,30 @@ if [ "$?" == "0" ] ; then
     echo "files committed."
 fi
 
+titofound=0
+if [ ! -d "rel-eng" ] ; then
+    rc=`which tito`
+    if [ "$?" == "0" ] ; then
+        titofound=1
+        tito init
+        perl -i -pe 's/VersionTagger/ReleaseTagger/g' rel-eng/tito.props
+        perl -i -pe 's/Builder/NoTgzBuilder/g' rel-eng/tito.props
+    else
+        echo "No 'tito' found, please install and run 'tito init'"
+    fi
+fi
+
+if [ $titofound == 1 ] ; then
+    echo "we found tito"
+    dirs=`find . -name '*.spec' | xargs -n 1 dirname`
+    for dir in ${dirs[@]}
+    do
+        cd $dir
+        tito tag --accept-auto-changelog --auto-changelog-message="rebuild with tito"
+        cd ..
+    done
+fi
+
 # now report on what's left
 for srcfile in SOURCES/*
 do
