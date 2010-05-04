@@ -7,9 +7,6 @@ _known_packages = [f for f in os.listdir('/home/devel/jesusr/dev/MySpecs/rel-eng
 def filter_cp_tags(tag):
     return tag['name'].endswith('-cp-0.1-candidate')
 
-def find_known_packages(path):
-    pass
-
 if __name__ == "__main__":
     session = koji.ClientSession('http://koji.rhndev.redhat.com/kojihub')
     session.ssl_login('/home/devel/jesusr/.spacewalk.cert', '/home/devel/jesusr/.spacewalk-ca.cert', '/home/devel/jesusr/.spacewalk-ca.cert')
